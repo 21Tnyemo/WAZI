@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wazi: verify a property before you pay</title>
+<style>
+:root{--bg:#f2f7f6;--sf:#fff;--ink:#0f2a2a;--mu:#52676a;--ln:#d3e1df;--br:#0b6e6a;--bi:#fff;--ok:#1c7d4a;--rv:#a85f00;--fl:#b3261e;--okb:#e1f3e8;--rvb:#fcefd6;--flb:#fbe4e1;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c1819;--sf:#132628;--ink:#e6f2f0;--mu:#9bb3b1;--ln:#25423f;--br:#4cc2bb;--bi:#052321;--ok:#5fd18e;--rv:#f0b650;--fl:#ff8a80;--okb:#12301f;--rvb:#35290d;--flb:#3a1816;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0c1819;--sf:#132628;--ink:#e6f2f0;--mu:#9bb3b1;--ln:#25423f;--br:#4cc2bb;--bi:#052321;--ok:#5fd18e;--rv:#f0b650;--fl:#ff8a80;--okb:#12301f;--rvb:#35290d;--flb:#3a1816;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.w{max-width:880px;margin:0 auto;padding:0 18px}
+header{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:16px 0}
+.logo{font:700 26px/1 Georgia,"Iowan Old Style",serif;letter-spacing:.01em}.logo small{display:block;font:400 12px system-ui,sans-serif;color:var(--mu);margin-top:4px}
+nav{display:flex;gap:6px;flex-wrap:wrap}
+button,input{font:inherit;color:inherit}
+nav button,.lang{background:none;border:1px solid var(--ln);border-radius:999px;padding:7px 14px;cursor:pointer}
+nav button[aria-current="true"]{background:var(--br);color:var(--bi);border-color:var(--br)}
+:focus-visible{outline:3px solid var(--br);outline-offset:2px}
+h1{font:700 clamp(28px,6vw,44px)/1.12 Georgia,"Iowan Old Style",serif;margin:22px 0 10px;max-width:16em}
+.sub{color:var(--mu);max-width:38em;margin:0 0 20px}
+.sb{display:flex;gap:8px;flex-wrap:wrap}
+.sb input{flex:1 1 260px;padding:13px 14px;border:1.5px solid var(--ln);border-radius:10px;background:var(--sf)}
+.pri{background:var(--br);color:var(--bi);border:0;border-radius:10px;padding:13px 20px;font-weight:650;cursor:pointer}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 26px;align-items:center;color:var(--mu);font-size:14px}
+.chips button{background:var(--sf);border:1px solid var(--ln);border-radius:8px;padding:5px 10px;cursor:pointer;font-size:14px}
+.rep,.card{background:var(--sf);border:1px solid var(--ln);border-radius:14px;padding:20px}
+.head{display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.head h2{margin:0;font:700 22px/1.2 Georgia,serif}.mu{color:var(--mu);margin:4px 0 0;font-size:14px}
+.sc{display:flex;align-items:center;gap:14px}.ring{width:112px;height:112px}
+.trk{fill:none;stroke:var(--ln);stroke-width:10}.arc{fill:none;stroke-width:10;stroke-linecap:round;transition:stroke-dashoffset 1s cubic-bezier(.2,.7,.2,1)}
+.num{font:700 34px system-ui;fill:var(--ink)}
+.ok{--c:var(--ok);--cb:var(--okb)}.review{--c:var(--rv);--cb:var(--rvb)}.flag{--c:var(--fl);--cb:var(--flb)}
+.arc{stroke:var(--c)}.vd{display:inline-block;background:var(--cb);color:var(--c);font-weight:700;border-radius:8px;padding:5px 11px}
+ul{list-style:none;margin:18px 0 0;padding:0}
+.chk{display:grid;grid-template-columns:30px 1fr auto;gap:10px;align-items:start;padding:11px 0;border-top:1px solid var(--ln)}
+.ic{width:26px;height:26px;border-radius:50%;background:var(--cb);color:var(--c);display:grid;place-items:center;font-weight:800;font-size:14px}
+.chk small{display:block;color:var(--mu)}.chk em{font-style:normal;font-size:13px;font-weight:650;color:var(--c)}
+h3{font:700 17px Georgia,serif;margin:22px 0 8px}
+.bar{position:relative;height:12px;background:var(--ln);border-radius:6px;margin:16px 0 8px}
+.band{position:absolute;top:0;bottom:0;background:var(--okb);outline:1.5px solid var(--ok);border-radius:6px}
+.mk{position:absolute;top:-6px;width:5px;height:24px;margin-left:-2px;border-radius:3px;background:var(--c)}
+.row{display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between;font-size:14px;color:var(--mu)}
+.row b{color:var(--ink)}
+.acts{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:20px}
+.sec{background:none;border:1.5px solid var(--br);color:var(--br);border-radius:10px;padding:10px 16px;font-weight:650;cursor:pointer}
+textarea{width:100%;margin-top:10px;padding:10px;border:1px solid var(--ln);border-radius:8px;background:var(--bg);font:13px/1.4 ui-monospace,monospace;color:inherit}
+.ag{display:grid;grid-template-columns:1fr 130px;gap:14px;align-items:center;padding:14px 0;border-top:1px solid var(--ln)}
+.ag:first-of-type{border-top:0}.tb{height:10px;background:var(--ln);border-radius:5px;overflow:hidden}.tb i{display:block;height:100%;background:var(--c)}
+.fm{display:grid;gap:12px;max-width:440px}.fm label{display:grid;gap:5px;font-size:14px;color:var(--mu)}
+.fm input{padding:12px;border:1.5px solid var(--ln);border-radius:10px;background:var(--sf)}
+.rq{padding:8px 0;border-top:1px solid var(--ln);font-size:14px}
+footer{margin:34px 0 28px;color:var(--mu);font-size:13px;border-top:1px solid var(--ln);padding-top:16px}
+.np{position:sticky;top:0;z-index:5;max-width:880px;margin:0 auto;padding:0 18px}.np .card{box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.nt{padding:9px 12px;margin:6px 0;border-left:4px solid var(--c);background:var(--cb);border-radius:6px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;z-index:9;max-width:90vw}
+.rg{display:inline-flex;gap:6px;align-items:center;margin-right:12px;flex-wrap:wrap}.rg b{color:var(--ink);font-size:13px}
+.wa{margin-top:20px}.bub{white-space:pre-line;background:var(--okb);border:1px solid var(--ok);border-radius:4px 14px 14px 14px;padding:10px 14px;font-size:14px;max-width:34em;margin-top:6px}
+.fb{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:20px;padding-top:14px;border-top:1px solid var(--ln)}.fb input{flex:1 1 220px;padding:10px;border:1.5px solid var(--ln);border-radius:8px;background:var(--sf)}
+[hidden]{display:none!important}
+@media(max-width:520px){.ag{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.arc{transition:none}}
+</style>
+</head>
+<body>
+<div class="w">
+<header>
+ <div class="logo">Wazi<small data-i="tag"></small></div>
+ <nav><button data-t="verify" aria-current="true" data-i="n1"></button><button data-t="agents" data-i="n2"></button><button data-t="request" data-i="n3"></button><button class="lang" id="bell" aria-label="Notifications">&#128276; <span id="bc">0</span></button><button class="lang" id="lang" aria-label="Language">SW</button></nav>
+</header>
+
+<div id="np" class="np" hidden></div><div id="toast" class="toast" role="status" hidden></div><main>
+<section id="verify">
+ <h1 data-i="h1"></h1>
+ <p class="sub" data-i="sub"></p>
+ <div class="sb"><input id="q" data-p="ph" autocomplete="off"><button class="pri" id="go" data-i="btn"></button></div>
+ <div class="chips" id="chips"></div>
+ <div id="res" aria-live="polite"></div>
+</section>
+
+<section id="agents" hidden><h1 data-i="at"></h1><div class="card" id="aglist"></div></section>
+
+<section id="request" hidden>
+ <h1 data-i="rt"></h1>
+ <div class="card"><div class="fm">
+  <label><span data-i="rl"></span><input id="rref"></label>
+  <label><span data-i="pl"></span><input id="rph" inputmode="tel" placeholder="+255 7XX XXX XXX"></label>
+  <button class="pri" id="rsend" data-i="rb"></button>
+  <p class="mu" id="rmsg"></p>
+ </div><div id="rlist"></div></div>
+</section>
+</main>
+
+<footer><p data-i="demo"></p><p data-i="by"></p></footer>
+</div>
+
+<script>
+const L={en:{tag:"Verified property information",n1:"Verify",n2:"Agents",n3:"Request",h1:"Know the property is real before you pay.",sub:"Enter a plot number or listing code. Wazi checks ownership, documents, disputes and price, then gives you one clear report.",ph:"Plot number or listing code",btn:"Verify property",try:"Try a sample:",sc:"Wazi score",v1:"Looks verified",v2:"Proceed with caution",v3:"High risk",ok:"Verified",review:"Needs review",flag:"Flagged",c:["Owner identity matches records","Title deed is valid","Survey plan matches the plot","No disputes or mortgages","Land use allows this purpose"],pr:"Price check",ask:"Asking price",tr:"Typical range",pb:"Below market. Ask why before you pay.",pw:"Within the typical range.",pa:"Above market. Room to negotiate.",sl:"Seller",vs:"verified listings",cp:"Copy summary",cd:"Copied. Paste it to share.",nf:"No record found for",nh:"Request a verification and we will check it for you.",rq:"Request verification",at:"Agents ranked by trust",ls:"listings",rt:"Request a verification",rl:"Plot number or listing",pl:"WhatsApp number",rb:"Send request",rd:"Request saved on this device. In the live product we reply on WhatsApp.",re:"Enter the plot number and your WhatsApp number.",ne:"No notifications yet.",nr:"Report ready:",rc:"What to do next",v1r:"Confirm the final transfer with a lawyer, then pay through a traceable channel.",v2r:"Resolve the items above before you pay any deposit.",v3r:"Do not pay. Ask the seller to clear the flagged items first.",wa:"Message sent to your WhatsApp (preview)",hq:"Was this report helpful?",yes:"Yes",no:"No",ty:"Thank you. Your feedback helps us improve.",fp:"What was missing or wrong?",fs:"Send feedback",iss:"Issues",na:"Dispute update",nab:"WZ-DSM-3071: boundary dispute status changed.",npr:"Price update",nprb:"Typical range updated for Moshi Municipal.",nd:"Document alert",ndb:"WZ-KIL-5104: mortgage record needs your review.",demo:"Demo with sample data. Records shown are illustrative, not real registry results.",by:"Built by Nyemo Ramadhani Tuppa, Data Science, Eastern Africa Statistical Training Centre."},
+sw:{tag:"Taarifa za mali zilizothibitishwa",n1:"Thibitisha",n2:"Madalali",n3:"Omba",h1:"Jua kama mali ni halali kabla ya kulipa.",sub:"Weka namba ya kiwanja au msimbo wa tangazo. Wazi hukagua umiliki, nyaraka, migogoro na bei, kisha hukupa ripoti moja iliyo wazi.",ph:"Namba ya kiwanja au msimbo wa tangazo",btn:"Thibitisha mali",try:"Jaribu mfano:",sc:"Alama ya Wazi",v1:"Imethibitishwa",v2:"Endelea kwa tahadhari",v3:"Hatari kubwa",ok:"Sawa",review:"Inahitaji ukaguzi",flag:"Tahadhari",c:["Utambulisho wa mmiliki unalingana na kumbukumbu","Hati ya umiliki ni halali","Ramani ya upimaji inalingana na kiwanja","Hakuna migogoro wala rehani","Matumizi ya ardhi yanaruhusu lengo hili"],pr:"Ukaguzi wa bei",ask:"Bei inayoombwa",tr:"Kiwango cha kawaida",pb:"Chini ya soko. Uliza sababu kabla ya kulipa.",pw:"Ndani ya kiwango cha kawaida.",pa:"Juu ya soko. Unaweza kujadiliana.",sl:"Muuzaji",vs:"matangazo yaliyothibitishwa",cp:"Nakili muhtasari",cd:"Imenakiliwa. Bandika kushiriki.",nf:"Hakuna rekodi ya",nh:"Omba ukaguzi nasi tutaukagua kwa ajili yako.",rq:"Omba ukaguzi",at:"Madalali kulingana na uaminifu",ls:"matangazo",rt:"Omba ukaguzi",rl:"Namba ya kiwanja au tangazo",pl:"Namba ya WhatsApp",rb:"Tuma ombi",rd:"Ombi limehifadhiwa kwenye kifaa hiki. Kwenye bidhaa halisi tunajibu kupitia WhatsApp.",re:"Weka namba ya kiwanja na namba yako ya WhatsApp.",ne:"Hakuna arifa bado.",nr:"Ripoti iko tayari:",rc:"Hatua inayofuata",v1r:"Thibitisha uhamisho wa mwisho na wakili, kisha lipa kwa njia inayoweza kufuatiliwa.",v2r:"Tatua masuala yaliyo juu kabla ya kulipa amana yoyote.",v3r:"Usilipe. Mwombe muuzaji aondoe masuala yaliyoonyeshwa kwanza.",wa:"Ujumbe uliotumwa WhatsApp (muhtasari)",hq:"Ripoti hii imekusaidia?",yes:"Ndiyo",no:"Hapana",ty:"Asante. Maoni yako yanatusaidia kuboresha.",fp:"Nini kilikosekana au kilikuwa kimekosewa?",fs:"Tuma maoni",iss:"Masuala",na:"Taarifa ya mgogoro",nab:"WZ-DSM-3071: hali ya mgogoro wa mipaka imebadilika.",npr:"Mabadiliko ya bei",nprb:"Kiwango cha kawaida kimesasishwa kwa Moshi Manispaa.",nd:"Tahadhari ya nyaraka",ndb:"WZ-KIL-5104: rekodi ya rehani inahitaji ukaguzi wako.",demo:"Toleo la majaribio lenye data za mfano. Rekodi zinazoonyeshwa ni za kielelezo, si matokeo halisi ya usajili.",by:"Imejengwa na Nyemo Ramadhani Tuppa, Sayansi ya Data, Eastern Africa Statistical Training Centre."}};
+const A=[{n:"Amani Estates",r:"Dar es Salaam",l:41,v:38},{n:"Kijiji Realty",r:"Dar es Salaam",l:63,v:29},{n:"Capital Plots",r:"Dodoma",l:34,v:31},{n:"Makao Bora Agents",r:"Dodoma",l:19,v:12},{n:"Kibo Land Services",r:"Kilimanjaro",l:26,v:24},{n:"Moshi Homes",r:"Kilimanjaro",l:22,v:11}];
+const P=[
+{id:"WZ-DSM-1024",name:"Plot 124, Block C, Mbezi Beach",dist:"Kinondoni",reg:"Dar es Salaam",m2:800,price:240e6,rg:[250e3,360e3],s:"oooor",a:0,n:{4:["Residential use confirmed. Commercial use needs a permit.","Matumizi ya makazi yamethibitishwa. Biashara inahitaji kibali."]}},
+{id:"WZ-DSM-3071",name:"Plot 7, Block A, Mikocheni",dist:"Kinondoni",reg:"Dar es Salaam",m2:1000,price:180e6,rg:[250e3,350e3],s:"rrofo",a:1,n:{0:["Seller name differs from the record by one name.","Jina la muuzaji linatofautiana na rekodi kwa jina moja."],1:["Deed number not found in the registry extract.","Namba ya hati haipo kwenye dondoo la usajili."],3:["An active boundary dispute is on file.","Kuna mgogoro wa mipaka unaoendelea kwenye kumbukumbu."]}},
+{id:"WZ-DOD-2210",name:"Plot 310, Ihumwa",dist:"Dodoma City",reg:"Dodoma",m2:900,price:27e6,rg:[25e3,40e3],s:"ooooo",a:2,n:{}},
+{id:"WZ-DOD-2275",name:"Plot 88, Nzuguni",dist:"Dodoma City",reg:"Dodoma",m2:700,price:42e6,rg:[25e3,45e3],s:"rrooo",a:3,n:{0:["Seller acts for the owner. Power of attorney not uploaded.","Muuzaji anamwakilisha mmiliki. Hati ya uwakilishi haijapakiwa."],1:["Copy seen. Original not yet confirmed.","Nakala imeonekana. Asili haijathibitishwa."]}},
+{id:"WZ-KIL-5104",name:"Plot 22, Kiboriloni",dist:"Moshi Municipal",reg:"Kilimanjaro",m2:1000,price:78e6,rg:[60e3,110e3],s:"oooro",a:4,n:{3:["A bank mortgage is recorded. Ask for the release letter.","Rehani ya benki imerekodiwa. Omba barua ya kuondolewa."]}},
+{id:"WZ-KIL-5230",name:"Plot 14, Machame",dist:"Hai",reg:"Kilimanjaro",m2:4000,price:80e6,rg:[18e3,35e3],s:"oooor",a:5,n:{4:["Agricultural zoning. Building a home needs a change of use.","Eneo la kilimo. Kujenga nyumba kunahitaji mabadiliko ya matumizi."]}}];
+const W=[25,25,15,20,15],M={o:"ok",r:"review",f:"flag"},IC={o:"✓",r:"!",f:"✕"};
+let lang="en";const $=i=>document.getElementById(i),t=k=>L[lang][k],fm=n=>"TZS "+Math.round(n).toLocaleString("en-US");
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const score=p=>Math.round(p.s.split("").reduce((a,c,i)=>a+W[i]*(c==="o"?1:c==="r"?.5:0),0));
+const vd=s=>s>=85?["ok","v1"]:s>=60?["review","v2"]:["flag","v3"];
+let cur=null;
+function find(q){q=q.trim().toLowerCase().replace(/\s+/g," ");if(q.length<2)return null;const k=q.replace(/\s/g,"");return P.find(p=>p.id.toLowerCase()===k||(p.name+" "+p.reg+" "+p.dist).toLowerCase().includes(q))||null}
+function show(p){cur=p;const s=score(p),[cl,vk]=vd(s),pm=p.price/p.m2,lo=p.rg[0]*.6,hi=p.rg[1]*1.4,pc=v=>Math.min(100,Math.max(0,(v-lo)/(hi-lo)*100));
+const iss=p.s.split("").map((c,i)=>c==="o"?null:(p.n[i]?p.n[i][lang==="en"?0:1]:t("c")[i])).filter(Boolean),msg=`Wazi ${p.id}\n${p.name}, ${p.dist}\n${t("sc")}: ${s}/100, ${t(vk)}\n${t("ask")}: ${fm(p.price)}`+(iss.length?`\n${t("iss")}: ${iss.join("; ")}`:"");const pk=pm<p.rg[0]?"pb":pm>p.rg[1]?"pa":"pw",pcl=pk==="pw"?"ok":pk==="pb"?"flag":"review",a=A[p.a],tp=Math.round(a.v/a.l*100),acl=tp>=85?"ok":tp>=60?"review":"flag";
+$("res").innerHTML=`<article class="rep ${cl}"><div class="head"><div><h2>${esc(p.name)}</h2><p class="mu">${p.id}, ${p.dist}, ${p.reg}, ${p.m2} m²</p></div>
+<div class="sc"><svg class="ring" viewBox="0 0 120 120" role="img" aria-label="${t("sc")} ${s}"><circle class="trk" cx="60" cy="60" r="52"/><circle class="arc" id="arc" cx="60" cy="60" r="52" transform="rotate(-90 60 60)" style="stroke-dasharray:326.7;stroke-dashoffset:326.7"/><text class="num" x="60" y="71" text-anchor="middle">${s}</text></svg><div><div class="mu">${t("sc")}</div><span class="vd">${t(vk)}</span></div></div></div>
+<ul>${p.s.split("").map((c,i)=>`<li class="chk ${M[c]}"><span class="ic" aria-hidden="true">${IC[c]}</span><div><b>${t("c")[i]}</b>${p.n[i]?`<small>${p.n[i][lang==="en"?0:1]}</small>`:""}</div><em>${t(M[c])}</em></li>`).join("")}</ul>
+<h3>${t("pr")}</h3><div class="${pcl}"><div class="bar"><div class="band" style="left:${pc(p.rg[0])}%;width:${pc(p.rg[1])-pc(p.rg[0])}%"></div><div class="mk" style="left:${pc(pm)}%"></div></div>
+<div class="row"><span>${t("ask")}: <b>${fm(p.price)}</b> (${fm(pm)}/m²)</span><span>${t("tr")}: <b>${fm(p.rg[0])}–${fm(p.rg[1])}/m²</b></span></div><p><span class="vd">${t(pk)}</span></p></div>
+<h3>${t("sl")}</h3><div class="${acl}"><b>${a.n}</b> <span class="vd">${tp}%</span> <span class="mu">${a.v}/${a.l} ${t("vs")}</span></div>
+<h3>${t("rc")}</h3><p>${t(vk+"r")}</p><div class="wa"><div class="mu">${t("wa")}</div><div class="bub">${esc(msg)}</div></div><div class="fb" id="fb"><span>${t("hq")}</span><button class="sec" data-f="1">${t("yes")}</button><button class="sec" data-f="0">${t("no")}</button></div><div class="acts"><button class="sec" id="cp">${t("cp")}</button></div></article>`;post(p,s,vk);
+requestAnimationFrame(()=>requestAnimationFrame(()=>{const ar=$("arc");if(ar)ar.style.strokeDashoffset=326.7*(1-s/100)}));
+$("cp").onclick=async()=>{const x=`Wazi: ${p.name} (${p.id})\n${t("sc")}: ${s}/100, ${t(vk)}\n${t("ask")}: ${fm(p.price)}`;try{await navigator.clipboard.writeText(x);$("cp").textContent=t("cd")}catch(e){const ta=document.createElement("textarea");ta.value=x;ta.readOnly=true;$("cp").after(ta);ta.select()}}}
+function run(){const q=$("q").value,p=find(q);if(p)return show(p);cur=null;$("res").innerHTML=`<div class="card"><h3 style="margin-top:0">${t("nf")} “${esc(q.trim())}”.</h3><p class="mu">${t("nh")}</p><button class="pri" id="rqb">${t("rq")}</button></div>`;$("rqb").onclick=()=>{$("rref").value=q.trim();tab("request")}}
+function tab(n){document.querySelectorAll("section").forEach(s=>s.hidden=s.id!==n);document.querySelectorAll("nav button[data-t]").forEach(b=>b.setAttribute("aria-current",b.dataset.t===n))}
+function agents(){$("aglist").innerHTML=[...A].sort((a,b)=>b.v/b.l-a.v/a.l).map(a=>{const p=Math.round(a.v/a.l*100),c=p>=85?"ok":p>=60?"review":"flag";return`<div class="ag ${c}"><div><b>${a.n}</b> <span class="mu">${a.r}</span><div class="mu">${a.l} ${t("ls")}, ${a.v} ${t("vs")}</div></div><div><span class="vd">${p}%</span><div class="tb" style="margin-top:6px"><i style="width:${p}%"></i></div></div></div>`}).join("")}
+let RQ=[];try{RQ=JSON.parse(localStorage.getItem("wazi_rq")||"[]")}catch(e){}
+function rl(){$("rlist").innerHTML=RQ.map(r=>`<div class="rq"><b>${esc(r.ref)}</b> ${esc(r.ph)}</div>`).join("")}
+$("rsend").onclick=()=>{const r=$("rref").value.trim(),h=$("rph").value.trim();if(!r||!h){$("rmsg").textContent=t("re");return}RQ.unshift({ref:r,ph:h});try{localStorage.setItem("wazi_rq",JSON.stringify(RQ.slice(0,20)))}catch(e){}$("rmsg").textContent=t("rd");$("rref").value=$("rph").value="";rl()};
+function text(){document.documentElement.lang=lang;document.querySelectorAll("[data-i]").forEach(e=>e.textContent=t(e.dataset.i));document.querySelectorAll("[data-p]").forEach(e=>e.placeholder=t(e.dataset.p));$("lang").textContent=lang==="en"?"SW":"EN";agents();chips();if(cur)show(cur)}
+$("go").onclick=run;$("q").onkeydown=e=>{if(e.key==="Enter")run()};
+document.querySelectorAll("nav button[data-t]").forEach(b=>b.onclick=()=>tab(b.dataset.t));
+$("lang").onclick=()=>{lang=lang==="en"?"sw":"en";text()};
+const N=[],seen={},KC={rep:"ok",fb:"ok",al:"flag",pr:"review"};
+function nr(){$("bc").textContent=N.length;$("np").innerHTML='<div class="card">'+(N.length?N.map(n=>`<div class="nt ${KC[n.k]}"><b>${esc(n.ti)}</b><div class="mu">${esc(n.bo)}, ${n.tm}</div></div>`).join(""):t("ne"))+"</div>"}
+function notify(k,ti,bo,quiet){N.unshift({k,ti,bo,tm:new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})});nr();if(!quiet){const e=$("toast");e.textContent=ti;e.hidden=false;clearTimeout(notify.h);notify.h=setTimeout(()=>e.hidden=true,3500)}}
+function chips(){const g={};P.forEach(p=>(g[p.reg]=g[p.reg]||[]).push(p));$("chips").innerHTML="<span>"+t("try")+"</span>"+Object.keys(g).map(r=>`<span class="rg"><b>${r}</b>${g[r].map(p=>`<button data-q="${p.id}">${p.id.slice(3)}</button>`).join("")}</span>`).join("");document.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>{$("q").value=b.dataset.q;run()})}
+function post(p,s,vk){if(!seen[p.id]){seen[p.id]=1;notify("rep",t("nr")+" "+p.id,t("sc")+" "+s+", "+t(vk))}
+document.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>{const up=b.dataset.f==="1",ok=()=>{$("fb").innerHTML="<span>"+t("ty")+"</span>";try{const a=JSON.parse(localStorage.getItem("wazi_fb")||"[]");a.push({id:p.id,up,c:($("fc")||{}).value||""});localStorage.setItem("wazi_fb",JSON.stringify(a))}catch(e){}notify("fb",t("ty"),p.id)};if(up)return ok();$("fb").innerHTML=`<input id="fc" placeholder="${t("fp")}"><button class="pri" id="fs">${t("fs")}</button>`;$("fs").onclick=ok})}
+$("bell").onclick=()=>{$("np").hidden=!$("np").hidden};
+nr();text();rl();notify("pr",t("npr"),t("nprb"),1);notify("al",t("na"),t("nab"),1);notify("al",t("nd"),t("ndb"),1);$("q").value="WZ-DSM-3071";run();
+</script>
+</body>
+</html>
