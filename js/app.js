@@ -69,6 +69,7 @@
 
   function addNotif(title, body){
     notifs.unshift({ title: title, body: body, time: new Date() });
+    if(notifs.length > 20) notifs.length = 20;
     var c = document.getElementById('bellCount');
     c.textContent = notifs.length;
     renderNotifs();
@@ -250,8 +251,15 @@
   });
 
   var panel = document.getElementById('notifPanel');
-  document.getElementById('bellBtn').addEventListener('click', function(){ panel.hidden = !panel.hidden; });
-  document.getElementById('notifClose').addEventListener('click', function(){ panel.hidden = true; });
+  var backdrop = document.getElementById('notifBackdrop');
+  function openPanel(){ panel.hidden = false; backdrop.hidden = false; }
+  function closePanel(){ panel.hidden = true; backdrop.hidden = true; }
+  document.getElementById('bellBtn').addEventListener('click', function(){
+    if(panel.hidden) openPanel(); else closePanel();
+  });
+  document.getElementById('notifClose').addEventListener('click', closePanel);
+  backdrop.addEventListener('click', closePanel);
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closePanel(); });
 
   applyI18n();
   renderNotifs();
