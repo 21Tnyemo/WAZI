@@ -101,7 +101,7 @@
       '<rect width="380" height="220" fill="#e7f0ee"/>'+
       '<path d="M0 150 Q 90 130 190 150 T 380 145" stroke="#bcd3cf" stroke-width="10" fill="none"/>'+
       '<path d="M0 60 Q 120 80 230 55 T 380 70" stroke="#d5e4e0" stroke-width="8" fill="none"/>'+
-      '<polygon points="'+m.poly+'" fill="rgba(28,140,140,.18)" stroke="#1C8C8C" stroke-width="2.5"/>'+
+      '<polygon points="'+m.poly+'" fill="rgba(16,54,87,.18)" stroke="#103657" stroke-width="2.5"/>'+
       '<circle cx="'+m.pin.split(',')[0]+'" cy="'+m.pin.split(',')[1]+'" r="7" fill="#d6453d" stroke="#fff" stroke-width="2"/>'+
       '<text x="12" y="210" font-size="11" fill="#5b6b78">GPS '+esc(m.gps)+'</text>'+
       '</svg></div><div class="map-cap">'+esc(p.plot+', '+p.area+', '+p.region)+'</div>';
@@ -114,7 +114,6 @@
     var vText = a.verdict==='ok'?t('vOk'):(a.verdict==='caution'?t('vCaution'):t('vRisk'));
     var pr = p.price, band = priceBand(pr);
     var bandText = t(band), bandCls = 'pb-'+band;
-
     var checks = CHECK_ORDER.map(function(k){
       var c = p.checks[k];
       return '<li class="'+statusClass(c.s)+'">'+
@@ -131,9 +130,6 @@
     var nextStep = a.verdict==='ok'
       ? (LANG==='sw'?'Thibitisha uhamisho wa mwisho na wakili, kisha lipa kupitia njia inayofuatiliwa.':'Confirm the final transfer with a lawyer, then pay through a traceable channel.')
       : (LANG==='sw'?'Tatua mambo yaliyoainishwa hapo juu kabla ya kulipa amana yoyote.':'Resolve the flagged items above before you pay any deposit.');
-
-    var seal = 'https://api.qrserver.com/v1/create-qr-code/?size=140x140&data='+
-      encodeURIComponent('WAZI report '+ref+' | '+p.plot+' | https://21tnyemo.github.io/WAZI/');
 
     result.innerHTML =
       '<div class="card" id="reportCard">'+
@@ -156,7 +152,6 @@
           '<button class="btn btn-wa" id="waBtn">'+t('shareWa')+'</button>'+
           '<button class="btn btn-pdf" id="pdfBtn">'+t('downloadPdf')+'</button>'+
           '<button class="btn btn-out" id="newBtn">'+t('newSearch')+'</button>'+
-          '<span class="seal"><img id="sealImg" src="'+seal+'" alt="QR"/></span>'+
         '</div>'+
         '<div class="feedback"><span>'+t('helpfulQ')+'</span>'+
           '<button data-fb="yes">👍 '+t('yes')+'</button><button data-fb="no">👎 '+t('no')+'</button></div>'+
@@ -189,8 +184,6 @@
     result.querySelectorAll('[data-fb]').forEach(function(b){
       b.onclick = function(){ toast(t('thanks')); };
     });
-    var si = document.getElementById('sealImg');
-    if(si){ si.onerror = function(){ si.outerHTML = '<span class="seal-fallback">'+esc(ref)+'</span>'; }; }
   }
 
   function renderNoRecord(q){

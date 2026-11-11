@@ -1,6 +1,6 @@
 /* Wazi MVP — styles */
 :root{
-  --navy:#0B3D59; --teal:#1C8C8C; --teal-d:#156e6e;
+  --navy:#103657; --teal:#103657; --teal-d:#0b2740;
   --green:#1e9e5a; --amber:#e0a008; --red:#d6453d;
   --ink:#1b2733; --muted:#5b6b78; --line:#e3e9ee; --bg:#f4f7f9;
   --card:#ffffff; --shadow:0 6px 24px rgba(11,61,89,.08);
@@ -160,9 +160,37 @@ a{color:var(--teal);text-decoration:none}
   padding:12px 18px;border-radius:10px;font-size:14px;z-index:60;box-shadow:var(--shadow);animation:rise .2s ease}
 
 @media(max-width:560px){
+  .topbar{padding:10px 14px;gap:8px}
   .tagline{display:none}
-  .hero h1{font-size:22px}
-  .verdict{flex-direction:row}
+  .logo{font-size:20px}
+  .container{padding:18px 13px 54px}
+  .hero h1{font-size:21px}
+  .hero .sub{font-size:14px}
+  /* stack the search so the input and button are full width and easy to tap */
+  .search{flex-direction:column;gap:8px}
+  .search input{width:100%;font-size:16px}
+  .primary{width:100%;padding:14px 0}
+  .ghost{width:100%}
+  .demo-row{gap:10px}
+  .samples{width:100%}
+  /* report card: let header and price wrap cleanly */
+  .card-head{padding:16px 15px}
+  .card-head h2{font-size:18px}
+  .checks li{padding:11px 15px}
+  .section-title,.block,.verdict,.feedback,.disclaimer{padding-left:15px;padding-right:15px}
+  .verdict{flex-direction:row;gap:12px}
+  /* action buttons: full-width rows, big tap targets */
+  .report-foot{padding:14px 15px}
+  .report-foot .btn{flex:1 1 100%;padding:13px 0;text-align:center}
+  /* notifications take the full screen width on small phones */
+  .notif-panel{width:100%;max-width:100%}
+}
+/* very small phones */
+@media(max-width:360px){
+  .logo{font-size:18px}
+  .hero h1{font-size:19px}
+  .topbar-actions{gap:6px}
+  .lang-btn,.install-btn{padding:6px 8px;font-size:12px}
 }
 
 /* Print — PDF export */
