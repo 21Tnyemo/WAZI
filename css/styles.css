@@ -140,15 +140,17 @@ a{color:var(--teal);text-decoration:none}
 .reqbox{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;margin-top:12px;text-align:left}
 .reqbox input{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;margin:6px 0;font-size:15px}
 
-/* Notifications panel */
-.notif-backdrop{position:fixed;inset:0;background:rgba(16,54,87,.35);z-index:45;animation:fade .2s ease}
-@keyframes fade{from{opacity:0}to{opacity:1}}
-.notif-panel{position:fixed;top:0;right:0;height:100%;width:320px;max-width:86vw;background:#fff;
-  box-shadow:-8px 0 30px rgba(0,0,0,.16);z-index:50;display:flex;flex-direction:column;animation:slide .25s ease}
-@keyframes slide{from{transform:translateX(100%)}to{transform:none}}
-.notif-head{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line);color:var(--navy)}
+/* Notifications dropdown */
+.notif-panel{position:fixed;top:56px;right:12px;width:320px;max-width:calc(100vw - 24px);
+  max-height:min(70vh,460px);background:#fff;border:1px solid var(--line);border-radius:12px;
+  box-shadow:0 12px 34px rgba(16,54,87,.22);z-index:50;display:flex;flex-direction:column;
+  overflow:hidden;transform-origin:top right;animation:drop .16s ease}
+@keyframes drop{from{opacity:0;transform:translateY(-6px) scale(.98)}to{opacity:1;transform:none}}
+.notif-panel::before{content:"";position:absolute;top:-7px;right:16px;width:12px;height:12px;
+  background:#fff;border-left:1px solid var(--line);border-top:1px solid var(--line);transform:rotate(45deg)}
+.notif-head{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line);color:var(--navy)}
 #notifList{list-style:none;margin:0;padding:0;overflow:auto}
-#notifList li{padding:12px 16px;border-bottom:1px solid var(--line);font-size:14px}
+#notifList li{padding:11px 14px;border-bottom:1px solid var(--line);font-size:13.5px}
 #notifList li small{display:block;color:var(--muted);font-size:12px;margin-top:3px}
 .notif-empty{padding:20px;color:var(--muted);text-align:center}
 
@@ -184,8 +186,9 @@ a{color:var(--teal);text-decoration:none}
   /* action buttons: full-width rows, big tap targets */
   .report-foot{padding:14px 15px}
   .report-foot .btn{flex:1 1 100%;padding:13px 0;text-align:center}
-  /* notifications take the full screen width on small phones */
-  .notif-panel{width:100%;max-width:100%}
+  /* keep notifications as a compact dropdown on phones */
+  .notif-panel{top:52px;right:8px;width:300px;max-width:calc(100vw - 16px)}
+  .notif-panel::before{right:14px}
 }
 /* very small phones */
 @media(max-width:360px){

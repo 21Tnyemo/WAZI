@@ -251,14 +251,18 @@
   });
 
   var panel = document.getElementById('notifPanel');
-  var backdrop = document.getElementById('notifBackdrop');
-  function openPanel(){ panel.hidden = false; backdrop.hidden = false; }
-  function closePanel(){ panel.hidden = true; backdrop.hidden = true; }
-  document.getElementById('bellBtn').addEventListener('click', function(){
+  var bellBtn = document.getElementById('bellBtn');
+  function openPanel(){ panel.hidden = false; }
+  function closePanel(){ panel.hidden = true; }
+  bellBtn.addEventListener('click', function(e){
+    e.stopPropagation();
     if(panel.hidden) openPanel(); else closePanel();
   });
   document.getElementById('notifClose').addEventListener('click', closePanel);
-  backdrop.addEventListener('click', closePanel);
+  // close the dropdown when clicking anywhere outside it
+  document.addEventListener('click', function(e){
+    if(!panel.hidden && !panel.contains(e.target) && !bellBtn.contains(e.target)) closePanel();
+  });
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closePanel(); });
 
   applyI18n();
