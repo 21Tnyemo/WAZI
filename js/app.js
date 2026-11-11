@@ -72,6 +72,7 @@
     if(notifs.length > 20) notifs.length = 20;
     var c = document.getElementById('bellCount');
     c.textContent = notifs.length;
+    c.style.display = notifs.length ? '' : 'none';
     renderNotifs();
   }
 
@@ -242,10 +243,11 @@
   });
   document.getElementById('guidedBtn').addEventListener('click', runGuided);
 
-  document.getElementById('langBtn').addEventListener('click', function(){
+  document.getElementById('langBtn').addEventListener('click', function(e){
+    e.stopPropagation();
     setLang(getLang()==='en' ? 'sw' : 'en');
     applyI18n();
-    // re-render current report if one is shown
+    // re-render current report if one is shown (keeps any open dropdown open)
     var q = document.getElementById('searchInput').value;
     if(q && result.querySelector('#reportCard')) doSearch(q);
   });
@@ -267,6 +269,7 @@
 
   applyI18n();
   renderNotifs();
+  (function(){ var c=document.getElementById('bellCount'); c.style.display = notifs.length ? '' : 'none'; })();
 
   // ---- PWA: install prompt + service worker ----
   var deferredPrompt = null;
