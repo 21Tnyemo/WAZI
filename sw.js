@@ -1,5 +1,5 @@
 /* Wazi service worker — offline cache for the demo (low-bandwidth support) */
-var CACHE = 'wazi-v10';
+var CACHE = 'wazi-v11';
 var ASSETS = [
   './',
   './index.html',

@@ -1,4 +1,5 @@
-/* Wazi — sample dataset (illustrative only). Three regions: Dar es Salaam, Dodoma, Kilimanjaro. */
+/* Wazi — verification dataset (illustrative demo data, not real registry results).
+   Regions: Dar es Salaam, Dodoma, Kilimanjaro, Arusha, Mwanza. */
 window.WAZI_DATA = [
   {
     id:"P124", plot:"Plot 124, Block C", area:"Mbezi Beach", district:"Kinondoni", region:"Dar es Salaam",
@@ -13,7 +14,9 @@ window.WAZI_DATA = [
       disputes:{s:"Verified",src:"Court & tribunal records",date:"2026-10-18"},
       landUse:{s:"Verified",src:"Zoning record",date:"2026-09-30"}
     },
-    flags:[], map:{poly:"120,60 270,70 280,170 130,180", pin:"200,120", gps:"-6.735, 39.218"}
+    flags:[], map:{poly:"120,60 270,70 280,170 130,180", pin:"200,120", gps:"-6.735, 39.218"},
+    facts:{tenure:"Right of Occupancy (99 yrs)", registered:"2011-04-12", ward:"Mbezi Beach", plotNo:"124/C"},
+    docs:["Certificate of Title (certified copy)","Survey plan","Land rent receipt","Seller ID (NIDA)"]
   },
   {
     id:"P7", plot:"Plot 7, Block A", area:"Mikocheni", district:"Kinondoni", region:"Dar es Salaam",
@@ -30,7 +33,9 @@ window.WAZI_DATA = [
     },
     flags:["Seller acts for the owner. Power of attorney not uploaded.",
            "Bank mortgage recorded. Ask for the release letter."],
-    map:{poly:"110,50 280,60 285,180 120,185", pin:"195,115", gps:"-6.769, 39.260"}
+    map:{poly:"110,50 280,60 285,180 120,185", pin:"195,115", gps:"-6.769, 39.260"},
+    facts:{tenure:"Right of Occupancy (99 yrs)", registered:"2009-11-03", ward:"Mikocheni", plotNo:"7/A"},
+    docs:["Certificate of Title (certified copy)","Survey plan","Land rent receipt","Bank release letter (missing)"]
   },
   {
     id:"P88", plot:"Plot 88", area:"Nzuguni", district:"Dodoma City", region:"Dodoma",
@@ -46,7 +51,9 @@ window.WAZI_DATA = [
       landUse:{s:"Needs review",src:"Residential confirmed; commercial use needs a permit",date:"2026-10-10"}
     },
     flags:["Residential use confirmed. Commercial use needs a permit."],
-    map:{poly:"100,70 260,55 290,160 140,185", pin:"190,120", gps:"-6.158, 35.772"}
+    map:{poly:"100,70 260,55 290,160 140,185", pin:"190,120", gps:"-6.158, 35.772"},
+    facts:{tenure:"Right of Occupancy (99 yrs)", registered:"2016-06-21", ward:"Nzuguni", plotNo:"88"},
+    docs:["Certificate of Title (certified copy)","Survey plan","Land rent receipt"]
   },
   {
     id:"P310", plot:"Plot 310", area:"Ihumwa", district:"Dodoma City", region:"Dodoma",
@@ -63,7 +70,9 @@ window.WAZI_DATA = [
     },
     flags:["Title deed copy seen. Original not yet confirmed.",
            "Agricultural zoning. Building a home needs a change of use."],
-    map:{poly:"90,80 250,60 295,150 150,190", pin:"185,120", gps:"-6.093, 35.826"}
+    map:{poly:"90,80 250,60 295,150 150,190", pin:"185,120", gps:"-6.093, 35.826"},
+    facts:{tenure:"Customary / granted right", registered:"2018-02-14", ward:"Ihumwa", plotNo:"310"},
+    docs:["Title deed (copy only)","Survey plan","Land rent receipt"]
   },
   {
     id:"P14", plot:"Plot 14", area:"Machame", district:"Hai", region:"Kilimanjaro",
@@ -81,7 +90,9 @@ window.WAZI_DATA = [
     flags:["Seller name differs from the record by one name.",
            "Deed number not found in the registry extract.",
            "An active boundary dispute is on file."],
-    map:{poly:"110,60 270,75 275,175 120,175", pin:"195,120", gps:"-3.233, 37.265"}
+    map:{poly:"110,60 270,75 275,175 120,175", pin:"195,120", gps:"-3.233, 37.265"},
+    facts:{tenure:"Right of Occupancy (99 yrs)", registered:"2013-09-30", ward:"Machame", plotNo:"14"},
+    docs:["Certificate of Title (unconfirmed)","Survey plan","Land rent receipt (overdue)"]
   },
   {
     id:"P22", plot:"Plot 22", area:"Kiboriloni", district:"Moshi", region:"Kilimanjaro",
@@ -96,18 +107,87 @@ window.WAZI_DATA = [
       disputes:{s:"Verified",src:"Court & tribunal records",date:"2026-10-22"},
       landUse:{s:"Verified",src:"Zoning record",date:"2026-10-22"}
     },
-    flags:[], map:{poly:"120,65 265,60 280,170 130,180", pin:"200,118", gps:"-3.345, 37.360"}
+    flags:[], map:{poly:"120,65 265,60 280,170 130,180", pin:"200,118", gps:"-3.345, 37.360"},
+    facts:{tenure:"Right of Occupancy (99 yrs)", registered:"2015-01-08", ward:"Kiboriloni", plotNo:"22"},
+    docs:["Certificate of Title (certified copy)","Survey plan","Land rent receipt","Seller ID (NIDA)"]
+  },
+  {
+    id:"P451", plot:"Plot 451, Njiro", area:"Njiro", district:"Arusha City", region:"Arusha",
+    listing:"ARU-451", deed:"TD-63-44712", size:1400, landUse:"Residential",
+    owner:{name:"Daniel P. Mwaikambo", type:"Owner"},
+    seller:{name:"Arusha Property Hub", trust:4.3, listings:27},
+    price:{asking:95000000, perSqm:68000, low:55000, high:80000, comps:8},
+    checks:{
+      owner:{s:"Verified",src:"Ministry of Lands extract",date:"2026-10-30"},
+      titleDeed:{s:"Verified",src:"Registry extract",date:"2026-10-30"},
+      survey:{s:"Needs review",src:"Survey plan shows a 12 m road reserve overlap",date:"2026-10-30"},
+      disputes:{s:"Verified",src:"Court & tribunal records",date:"2026-10-30"},
+      landUse:{s:"Verified",src:"Zoning record",date:"2026-10-30"}
+    },
+    flags:["Survey plan overlaps a 12 m road reserve. Confirm the setback before building."],
+    map:{poly:"105,65 275,58 285,165 125,180", pin:"198,118", gps:"-3.386, 36.652"},
+    facts:{tenure:"Right of Occupancy (99 yrs)", registered:"2012-07-19", ward:"Njiro", plotNo:"451"},
+    docs:["Certificate of Title (certified copy)","Survey plan (overlap noted)","Land rent receipt"]
+  },
+  {
+    id:"P90", plot:"Plot 90, Kirumba", area:"Kirumba", district:"Ilemela", region:"Mwanza",
+    listing:"MWZ-90", deed:"TD-38-20944", size:1100, landUse:"Residential",
+    owner:{name:"Halima A. Nyangasa", type:"Owner"},
+    seller:{name:"Lake Zone Estates", trust:2.1, listings:6},
+    price:{asking:58000000, perSqm:24000, low:42000, high:60000, comps:4},
+    checks:{
+      owner:{s:"Flagged",src:"Record shows two competing claims on this plot",date:"2026-11-05"},
+      titleDeed:{s:"Flagged",src:"Duplicate title deed number reported",date:"2026-11-05"},
+      survey:{s:"Needs review",src:"Boundary markers not confirmed on site",date:"2026-11-05"},
+      disputes:{s:"Flagged",src:"Pending land tribunal case (Land Case 41/2025)",date:"2026-11-05"},
+      landUse:{s:"Verified",src:"Zoning record",date:"2026-11-05"}
+    },
+    flags:["Two competing ownership claims are recorded on this plot.",
+           "Duplicate title deed number reported.",
+           "Pending land tribunal case (Land Case 41/2025).",
+           "Price is far below the market range. Ask why."],
+    map:{poly:"100,75 255,62 288,155 138,188", pin:"188,122", gps:"-2.523, 32.917"},
+    facts:{tenure:"Disputed", registered:"2020-03-11", ward:"Kirumba", plotNo:"90"},
+    docs:["Title deed (duplicate reported)","Survey plan","No valid land rent receipt"]
   }
 ];
 
 window.WAZI_FIND = function(q){
   q = (q||"").trim().toLowerCase();
   if(!q) return null;
-  return window.WAZI_DATA.find(function(p){
+  var digits = q.replace(/[^0-9]/g,"");
+
+  // 1) exact identifier match (id, listing code, deed number)
+  var exact = window.WAZI_DATA.find(function(p){
+    return p.id.toLowerCase() === q ||
+           p.listing.toLowerCase() === q ||
+           p.deed.toLowerCase() === q;
+  });
+  if(exact) return exact;
+
+  // 2) exact plot number match ("124" -> Plot 124)
+  if(digits){
+    var byNo = window.WAZI_DATA.filter(function(p){
+      var m = p.plot.match(/(\d+)/);
+      return m && m[1] === digits.replace(/^0+/,'');
+    });
+    if(byNo.length) return byNo[0];
+  }
+
+  // 3) substring match across names, areas, districts, regions
+  var loose = window.WAZI_DATA.find(function(p){
     return [p.id,p.plot,p.area,p.district,p.region,p.listing,p.deed]
-      .join(" ").toLowerCase().includes(q)
-      || p.plot.toLowerCase().replace(/[^0-9]/g,"").includes(q.replace(/[^0-9]/g,"")) && /\d/.test(q);
-  }) || null;
+      .join(" ").toLowerCase().indexOf(q) !== -1;
+  });
+  if(loose) return loose;
+
+  // 4) last resort: plot number contains the digits
+  if(digits){
+    return window.WAZI_DATA.find(function(p){
+      return p.plot.replace(/[^0-9]/g,"").indexOf(digits) !== -1;
+    }) || null;
+  }
+  return null;
 };
 
 /* Guided demo order: a clean pass, a caution, then a high-risk case. */
