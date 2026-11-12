@@ -7,6 +7,14 @@
 
   function t(k){ return (I18N[LANG] && I18N[LANG][k]) || (I18N.en[k]) || k; }
 
+  // Translate data-driven strings (land-use values, sources, flags).
+  // Falls back to the original English when no Swahili mapping exists.
+  function td(s){
+    if(LANG !== 'sw' || s == null) return s;
+    var D = window.WAZI_DATA_SW || {};
+    return D[s] || s;
+  }
+
   function applyI18n(){
     document.documentElement.lang = LANG;
     document.querySelectorAll('[data-i18n]').forEach(function(el){
@@ -15,7 +23,11 @@
     document.querySelectorAll('[data-i18n-ph]').forEach(function(el){
       el.setAttribute('placeholder', t(el.getAttribute('data-i18n-ph')));
     });
-    document.getElementById('langBtn').textContent = (LANG === 'en') ? 'SW' : 'EN';
+    document.querySelectorAll('.lang-opt').forEach(function(b){
+      var on = b.getAttribute('data-lang') === LANG;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
   }
 
   function toast(msg){
@@ -121,23 +133,21 @@
       return '<li class="'+statusClass(c.s)+'">'+
         '<span class="ck-ico">'+statusIcon(c.s)+'</span>'+
         '<span class="ck-body"><span class="ck-name">'+t(k)+'</span>'+
-        '<span class="ck-meta">'+t('source')+': '+esc(c.src)+' · '+t('updated')+' '+esc(c.date)+'</span></span>'+
+        '<span class="ck-meta">'+t('source')+': '+esc(td(c.src))+' · '+t('updated')+' '+esc(c.date)+'</span></span>'+
         '<span class="ck-status">'+t(c.s)+'</span></li>';
     }).join('');
 
     var flags = p.flags.length ? '<div class="block"><div class="section-title">'+t('flagsTitle')+
       '</div><ul class="flags">'+ p.flags.map(function(f){
-        return '<li><span class="fdot">●</span><span>'+esc(f)+'</span></li>'; }).join('') +'</ul></div>' : '';
+        return '<li><span class="fdot">●</span><span>'+esc(td(f))+'</span></li>'; }).join('') +'</ul></div>' : '';
 
-    var nextStep = a.verdict==='ok'
-      ? (LANG==='sw'?'Thibitisha uhamisho wa mwisho na wakili, kisha lipa kupitia njia inayofuatiliwa.':'Confirm the final transfer with a lawyer, then pay through a traceable channel.')
-      : (LANG==='sw'?'Tatua mambo yaliyoainishwa hapo juu kabla ya kulipa amana yoyote.':'Resolve the flagged items above before you pay any deposit.');
+    var nextStep = a.verdict==='ok' ? t('nextOk') : t('nextAction');
 
     result.innerHTML =
       '<div class="card" id="reportCard">'+
         '<div class="print-head"><strong>WAZI</strong> — '+t('verifiedSeal')+' · '+ref+'</div>'+
         '<div class="card-head"><div><h2>'+esc(p.plot)+'</h2>'+
-          '<div class="loc">'+esc(p.area+', '+p.district+', '+p.region)+' · '+p.size+' m² · '+esc(p.landUse)+'</div>'+
+          '<div class="loc">'+esc(p.area+', '+p.district+', '+p.region)+' · '+p.size+' m² · '+esc(td(p.landUse))+'</div>'+
           '<div class="ref">'+t('verifiedSeal')+' № '+ref+' · '+t('seller')+': ★ '+pr_trust(p)+'</div></div></div>'+
         '<div class="verdict '+vClass+'"><div class="score-ring" style="--p:'+a.score+'"><span>'+a.score+'</span></div>'+
           '<div class="verdict-text"><strong>'+vText+'</strong><small>'+a.score+'/100</small></div></div>'+
@@ -243,13 +253,18 @@
   });
   document.getElementById('guidedBtn').addEventListener('click', runGuided);
 
-  document.getElementById('langBtn').addEventListener('click', function(e){
-    e.stopPropagation();
-    setLang(getLang()==='en' ? 'sw' : 'en');
-    applyI18n();
-    // re-render current report if one is shown (keeps any open dropdown open)
-    var q = document.getElementById('searchInput').value;
-    if(q && result.querySelector('#reportCard')) doSearch(q);
+  document.querySelectorAll('.lang-opt').forEach(function(b){
+    b.addEventListener('click', function(e){
+      e.stopPropagation();
+      var l = b.getAttribute('data-lang');
+      if(l === LANG) return;
+      LANG = l;
+      localStorage.setItem('wazi_lang', l);
+      applyI18n();
+      // re-render current report if one is shown (keeps any open dropdown open)
+      var q = document.getElementById('searchInput').value;
+      if(q && result.querySelector('#reportCard')) doSearch(q);
+    });
   });
 
   var panel = document.getElementById('notifPanel');

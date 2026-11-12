@@ -26,14 +26,17 @@ a{color:var(--teal);text-decoration:none}
 .icon-btn:active{transform:scale(.92)}
 .badge{position:absolute;top:-2px;right:-4px;background:var(--red);color:#fff;border-radius:10px;
   font-size:10px;min-width:16px;height:16px;line-height:16px;text-align:center;padding:0 3px}
-.lang-btn,.install-btn{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);
-  color:#fff;border-radius:8px;padding:6px 11px;font-weight:700;font-size:13px;cursor:pointer;
-  transition:background .15s,transform .1s}
-.lang-btn:hover,.install-btn:hover{background:rgba(255,255,255,.32)}
-.lang-btn:active,.install-btn:active{transform:scale(.94)}
-.lang-btn{letter-spacing:.5px}
-.install-btn{background:var(--teal);border-color:var(--teal)}
+.install-btn{background:var(--teal);border:1px solid var(--teal);color:#fff;border-radius:8px;
+  padding:6px 11px;font-weight:700;font-size:13px;cursor:pointer;transition:background .15s,transform .1s}
 .install-btn:hover{background:var(--teal-d)}
+.install-btn:active{transform:scale(.94)}
+.lang-switch{display:inline-flex;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.4);
+  border-radius:9px;overflow:hidden}
+.lang-opt{background:transparent;border:0;color:#fff;font-weight:700;font-size:13px;letter-spacing:.5px;
+  padding:6px 11px;cursor:pointer;transition:background .15s,color .15s,transform .1s}
+.lang-opt:hover{background:rgba(255,255,255,.2)}
+.lang-opt.active{background:#fff;color:var(--navy)}
+.lang-opt:active{transform:scale(.96)}
 
 .demo-banner{background:#fff6e5;color:#7a5a00;text-align:center;font-size:13px;padding:7px 14px;
   border-bottom:1px solid #f0e2bd}
@@ -204,8 +207,9 @@ a{color:var(--teal);text-decoration:none}
 @media(max-width:360px){
   .logo{font-size:18px}
   .hero h1{font-size:19px}
+  .topbar{flex-wrap:wrap}
   .topbar-actions{gap:6px}
-  .lang-btn,.install-btn{padding:6px 8px;font-size:12px}
+  .lang-opt,.install-btn{padding:6px 9px;font-size:12px}
 }
 
 /* Print — PDF export */

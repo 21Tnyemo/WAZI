@@ -22,7 +22,10 @@
       <button id="bellBtn" class="icon-btn" aria-label="Notifications">
         🔔<span id="bellCount" class="badge">0</span>
       </button>
-      <button id="langBtn" class="lang-btn" aria-label="Language">SW</button>
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" class="lang-opt" data-lang="en">EN</button>
+        <button type="button" class="lang-opt" data-lang="sw">SW</button>
+      </div>
       <button id="installBtn" class="install-btn hidden" data-i18n="install">Install</button>
     </div>
   </header>

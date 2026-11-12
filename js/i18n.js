@@ -40,7 +40,9 @@ window.WAZI_I18N = {
     below: "Below market — ask why", within: "Within the normal range", above: "Above market — negotiate",
     source: "Source", updated: "Updated", seller: "Seller trust",
     copied: "Report summary copied. Paste it to share.",
-    guidedRun: "Running guided demo\u2026"
+    guidedRun: "Running guided demo\u2026",
+    nextOk: "Confirm the final transfer with a lawyer, then pay through a traceable channel.",
+    nextAction: "Resolve the flagged items above before you pay any deposit."
   },
   sw: {
     tagline: "Thibitisha mali kabla ya kulipa.",
@@ -82,6 +84,42 @@ window.WAZI_I18N = {
     below: "Chini ya soko — uliza sababu", within: "Ndani ya kiwango cha kawaida", above: "Juu ya soko — jadiliana",
     source: "Chanzo", updated: "Imesasishwa", seller: "Uaminifu wa muuzaji",
     copied: "Muhtasari wa ripoti umenakiliwa. Bandika kushiriki.",
-    guidedRun: "Inaendesha onyesho elekezi\u2026"
+    guidedRun: "Inaendesha onyesho elekezi\u2026",
+    nextOk: "Thibitisha uhamisho wa mwisho na wakili, kisha lipa kupitia njia inayofuatiliwa.",
+    nextAction: "Tatua mambo yaliyoainishwa hapo juu kabla ya kulipa amana yoyote."
   }
+};
+
+/* Swahili translations for data-driven strings (land-use values, verification
+   sources, and flag messages). Keyed by the exact English source string. */
+window.WAZI_DATA_SW = {
+  // land-use values
+  "Residential": "Makazi",
+  "Agricultural": "Kilimo",
+  "Commercial": "Biashara",
+  "Industrial": "Viwanda",
+  // verification sources
+  "Ministry of Lands extract": "Nukuu kutoka Wizara ya Ardhi",
+  "Registry extract": "Nukuu ya usajili",
+  "Survey plan on file": "Ramani ya upimaji ipo kwenye faili",
+  "Court & tribunal records": "Kumbukumbu za mahakama na baraza",
+  "Zoning record": "Rekodi ya mgawanyo wa matumizi",
+  "Seller acts for owner; power of attorney not uploaded": "Muuzaji anamwakilisha mmiliki; hati ya uwakilishi haijapakiwa",
+  "Survey plan matches plot": "Ramani ya upimaji inalingana na kiwanja",
+  "Bank mortgage recorded": "Rehani ya benki imesajiliwa",
+  "Residential confirmed; commercial use needs a permit": "Makazi yamethibitishwa; matumizi ya biashara yanahitaji kibali",
+  "Copy seen. Original not yet confirmed": "Nakala imeonekana. Halisi bado haijathibitishwa",
+  "Agricultural zoning. Building a home needs a change of use": "Mgawanyo wa kilimo. Kujenga nyumba kunahitaji mabadiliko ya matumizi",
+  "Seller name differs from the record by one name": "Jina la muuzaji linatofautiana na rekodi kwa jina moja",
+  "Deed number not found in the registry extract": "Namba ya hati haikupatikana kwenye nukuu ya usajili",
+  "An active boundary dispute is on file": "Kuna mgogoro hai wa mpaka kwenye faili",
+  // flag messages
+  "Seller acts for the owner. Power of attorney not uploaded.": "Muuzaji anamwakilisha mmiliki. Hati ya uwakilishi haijapakiwa.",
+  "Bank mortgage recorded. Ask for the release letter.": "Rehani ya benki imesajiliwa. Omba barua ya kuachiliwa.",
+  "Residential use confirmed. Commercial use needs a permit.": "Matumizi ya makazi yamethibitishwa. Matumizi ya biashara yanahitaji kibali.",
+  "Title deed copy seen. Original not yet confirmed.": "Nakala ya hati ya umiliki imeonekana. Halisi bado haijathibitishwa.",
+  "Agricultural zoning. Building a home needs a change of use.": "Mgawanyo wa kilimo. Kujenga nyumba kunahitaji mabadiliko ya matumizi.",
+  "Seller name differs from the record by one name.": "Jina la muuzaji linatofautiana na rekodi kwa jina moja.",
+  "Deed number not found in the registry extract.": "Namba ya hati haikupatikana kwenye nukuu ya usajili.",
+  "An active boundary dispute is on file.": "Kuna mgogoro hai wa mpaka kwenye faili."
 };
