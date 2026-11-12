@@ -93,7 +93,7 @@ button{font-family:inherit}
   border-left:1px solid var(--line);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis
 }
-.topbar-actions{display:flex;align-items:center;gap:8px;flex:0 0 auto}
+.topbar-actions{display:flex;align-items:center;gap:8px;flex:0 0 auto;min-width:0}
 
 .icon-btn{
   position:relative;display:grid;place-items:center;
@@ -108,14 +108,23 @@ button{font-family:inherit}
 .icon-btn.ping{animation:ping .7s var(--ease)}
 @keyframes ping{0%{box-shadow:0 0 0 0 rgba(47,143,208,.55)}100%{box-shadow:0 0 0 12px rgba(47,143,208,0)}}
 
-.badge{
-  position:absolute;top:-5px;right:-5px;
+/* compact notification bell — 34px, sits inline with the language switch*/
+.bell-btn{flex:0 0 auto;width:34px;height:34px;border-radius:50%}
+.bell-btn svg{width:16.5px;height:16.5px}
+.bell-btn[aria-expanded="true"]{background:rgba(47,143,208,.18);color:#fff;border-color:#2f8fd0}
+.bell-btn.live .badge{display:grid !important}
+.bell-btn .badge{
+  position:absolute;top:-2px;right:-2px;
   background:var(--red);color:#fff;
-  border-radius:9px;border:2px solid var(--bg-2);
-  font-size:10px;font-weight:800;line-height:1;
-  min-width:18px;height:18px;padding:0 4px;
-  display:grid;place-items:center
+  border-radius:9px;border:2px solid #0a2136;
+  font-size:9px;font-weight:800;line-height:1;
+  min-width:15px;height:15px;padding:0 3.5px;
+  display:grid;place-items:center;
+  font-variant-numeric:tabular-nums;
+  box-shadow:0 1px 3px rgba(0,0,0,.5);
+  pointer-events:none
 }
+.bell-btn .badge[hidden]{display:none !important}
 
 /* segmented language switch */
 .lang-switch{
@@ -149,13 +158,20 @@ button{font-family:inherit}
 .install-btn:hover{filter:brightness(1.1)}
 .install-btn:active{transform:scale(.95)}
 
-/* ============ Demo banner ============ */
-.demo-banner{
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  background:linear-gradient(90deg,rgba(224,160,8,.13),rgba(224,160,8,.2),rgba(224,160,8,.13));
-  border-bottom:1px solid rgba(224,160,8,.24);
-  color:#ecc768;font-size:12.5px;font-weight:600;
-  text-align:center;padding:7px 16px;letter-spacing:.1px
+/* ============ Demo data note (subtle, inline) ============ */
+.demo-note{
+  margin:16px auto 0;max-width:560px;
+  display:inline-flex;align-items:center;gap:7px;
+  color:#8aa4bb;font-size:11.5px;font-weight:600;
+  padding:5px 11px;border-radius:999px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.07);
+  letter-spacing:.1px
+}
+.demo-note::before{
+  content:"";flex:0 0 auto;
+  width:6px;height:6px;border-radius:50%;
+  background:#e0a008;box-shadow:0 0 0 3px rgba(224,160,8,.14)
 }
 
 /* ============ Layout ============ */
@@ -629,45 +645,54 @@ button{font-family:inherit}
 .how-list strong{font-size:13px;color:#fff}
 .how-list li>span:last-child{font-size:12px;color:var(--muted);line-height:1.45}
 
-/* ============ Notifications ============ */
+/* ============ Notifications (small anchored popover) ============ */
 .notif-panel{
-  position:fixed;top:60px;right:14px;
-  width:342px;max-width:calc(100vw - 24px);
-  max-height:min(72vh,480px);
-  background:linear-gradient(180deg,#12324f,#0c2439);
+  position:fixed;
+  top:0;right:auto;left:auto;
+  width:270px;
+  max-width:calc(100vw - 16px);
+  max-height:min(50vh,300px);
+  background:#0e2740;
   border:1px solid #26507a;
-  border-radius:14px;
-  box-shadow:0 22px 56px rgba(0,0,0,.6);
-  z-index:60;display:flex;flex-direction:column;
+  border-radius:11px;
+  box-shadow:0 12px 32px rgba(0,0,0,.6),0 2px 6px rgba(0,0,0,.4);
+  z-index:80;display:flex;flex-direction:column;
   overflow:hidden;
-  animation:dropIn .18s var(--ease)
+  animation:popIn .13s var(--ease)
 }
-@keyframes dropIn{from{opacity:0;transform:translateY(-8px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes popIn{from{opacity:0;transform:translateY(-4px) scale(.98)}to{opacity:1;transform:none}}
+.notif-tip{
+  position:absolute;top:-6px;left:0;width:12px;height:12px;
+  transform:rotate(45deg);
+  background:#0e2740;border-left:1px solid #26507a;border-top:1px solid #26507a;
+  border-radius:2px 0 0 0;
+  pointer-events:none
+}
 .notif-head{
   display:flex;align-items:center;justify-content:space-between;
-  gap:10px;padding:12px 13px;
+  gap:8px;padding:9px 11px;
   border-bottom:1px solid var(--line);
-  background:rgba(255,255,255,.03)
+  background:rgba(255,255,255,.035)
 }
-.notif-head strong{font-size:13px;letter-spacing:.2px}
-.nh-actions{display:flex;align-items:center;gap:6px}
-.nh-actions .icon-btn{width:28px;height:28px;border-radius:8px}
-.nh-actions .icon-btn svg{width:13px;height:13px}
+.notif-head strong{font-size:12px;font-weight:800;letter-spacing:.3px}
+.nh-actions{display:flex;align-items:center;gap:4px}
+.nh-actions .icon-btn{width:24px;height:24px;border-radius:7px;background:transparent;border:0}
+.nh-actions .icon-btn svg{width:12px;height:12px}
 .link-btn{
   background:transparent;border:0;color:var(--muted);
-  font-size:11.5px;font-weight:700;cursor:pointer;
-  padding:4px 6px;border-radius:6px;transition:color .15s,background .15s
+  font-size:11px;font-weight:700;cursor:pointer;
+  padding:3px 5px;border-radius:6px;transition:color .15s,background .15s
 }
 .link-btn:hover{color:#f5928b;background:rgba(224,85,77,.12)}
 #notifList{list-style:none;margin:0;padding:0;overflow-y:auto;overscroll-behavior:contain}
 #notifList li{
-  padding:11px 13px;border-bottom:1px solid var(--line-soft);font-size:12.5px
+  padding:9px 11px;border-bottom:1px solid var(--line-soft);font-size:12px
 }
 #notifList li:last-child{border-bottom:0}
-.n-title{font-weight:700;color:var(--ink);line-height:1.4}
-.n-body{color:var(--muted);font-size:12px;margin-top:2px;line-height:1.45}
-#notifList li small{display:block;color:#5f7d96;font-size:10.5px;margin-top:4px;font-variant-numeric:tabular-nums}
-.notif-empty{padding:26px;color:var(--muted);text-align:center;font-size:12.5px}
+.n-title{font-weight:700;color:var(--ink);line-height:1.35;font-size:12px}
+.n-body{color:var(--muted);font-size:11.5px;margin-top:2px;line-height:1.4}
+#notifList li small{display:block;color:#5f7d96;font-size:10px;margin-top:3px;font-variant-numeric:tabular-nums}
+.notif-empty{padding:20px 14px;color:var(--muted);text-align:center;font-size:11.5px;line-height:1.5}
 
 /* ============ Footer ============ */
 .site-foot{
@@ -750,7 +775,8 @@ button{font-family:inherit}
   .pc-plot{font-size:12.5px}
   .pc-score{font-size:15.5px}
 
-  .notif-panel{top:56px;right:8px;left:8px;width:auto;max-width:none}
+  /* small popover — position is set by the app so it always hangs off the bell */
+  .bell-btn{width:32px;height:32px}
   .foot-inner{padding:18px 14px 34px;flex-direction:column;gap:8px}
 }
 
@@ -774,7 +800,7 @@ button{font-family:inherit}
     font-size:11pt
   }
   body::before{display:none}
-  .topbar,.demo-banner,.hero,.site-foot,.browse,.how,
+  .topbar,.demo-note,.hero,.site-foot,.browse,.how,
   .report-foot,.feedback,#notifPanel,#toast,.install-btn,
   .search,.chip,.ghost{display:none !important}
   .container{max-width:100%;padding:0}

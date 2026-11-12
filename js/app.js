@@ -91,11 +91,21 @@
     state.notifs.unshift({ title: title, body: body, time: new Date() });
     if(state.notifs.length > 30) state.notifs.length = 30;
     renderNotifs();
-    var c = $('bellCount');
-    c.textContent = state.notifs.length;
-    c.style.display = state.notifs.length ? '' : 'none';
+    syncBadge();
+    var live = $('bellLive');
+    if(live) live.textContent = state.notifs.length + ' ' + t('notifications');
     $('bellBtn').classList.add('ping');
     setTimeout(function(){ $('bellBtn').classList.remove('ping'); }, 700);
+  }
+
+  /* badge only exists when there is at least one unread item */
+  function syncBadge(){
+    var c = $('bellCount');
+    if(!c) return;
+    var n = state.notifs.length;
+    c.textContent = n > 9 ? '9+' : String(n);
+    c.hidden = n === 0;
+    $('bellBtn').classList.toggle('live', n > 0);
   }
   function renderNotifs(){
     var list = $('notifList');
@@ -463,21 +473,70 @@
       });
     });
 
-    /* notifications panel */
+    /* notifications: small anchored popover (never covers page content) */
     var panel = $('notifPanel');
     var bell = $('bellBtn');
-    function closePanel(){ panel.hidden = true; }
+    var hideTimer = null;
+    function closePanel(){
+      if(hideTimer){ clearTimeout(hideTimer); hideTimer = null; }
+      panel.hidden = true;
+      bell.setAttribute('aria-expanded','false');
+    }
+    function openPanel(){
+      if(hideTimer){ clearTimeout(hideTimer); hideTimer = null; }
+      placePanel();
+      panel.hidden = false;
+      bell.setAttribute('aria-expanded','true');
+      var first = panel.querySelector('li, .notif-empty');
+      if(first) first.setAttribute('tabindex','-1');
+    }
+    /* anchor the popover exactly under the bell, with its pointer on the bell */
+    function placePanel(){
+      panel.style.top = '';
+      panel.style.right = '';
+      panel.style.left = '';
+      var br = bell.getBoundingClientRect();
+      var vw = window.innerWidth;
+      var margin = 8;
+      var pw = Math.min(276, vw - margin * 2);
+      panel.style.width = pw + 'px';
+      /* right-align the card to the bell, then keep it inside the viewport */
+      var left = br.right - pw;
+      left = Math.max(margin, Math.min(left, vw - pw - margin));
+      var top = br.bottom + 10;
+      panel.style.left = Math.round(left) + 'px';
+      panel.style.zIndex = '80';
+      panel.style.right = 'auto';
+      panel.style.top = Math.round(top) + 'px';
+      /* pointer arrow: sits on the bell centre, clamped inside the card */
+      var tip = panel.querySelector('.notif-tip');
+      if(tip){
+        var c = br.left + br.width / 2 - left - 6;
+        tip.style.left = Math.max(10, Math.min(c, pw - 20)) + 'px';
+      }
+    }
+    panel.addEventListener('mouseenter', function(){
+      if(hideTimer){ clearTimeout(hideTimer); hideTimer = null; }
+    });
+    panel.addEventListener('mouseleave', function(){
+      if(!panel.hidden) hideTimer = setTimeout(closePanel, 450);
+    });
     bell.addEventListener('click', function(e){
       e.stopPropagation();
-      panel.hidden = !panel.hidden;
+      if(panel.hidden) openPanel(); else closePanel();
     });
     $('notifClose').addEventListener('click', closePanel);
     $('clearNotifs').addEventListener('click', function(){
       state.notifs = [];
       renderNotifs();
-      $('bellCount').style.display = 'none';
+      syncBadge();
+      var live = $('bellLive');
+      if(live) live.textContent = '';
       closePanel();
       toast(t('clearAll'));
+    });
+    window.addEventListener('resize', function(){
+      if(!panel.hidden) closePanel();
     });
     document.addEventListener('click', function(e){
       if(!panel.hidden && !panel.contains(e.target) && !bell.contains(e.target)) closePanel();
@@ -512,13 +571,22 @@
   }
 
   /* ---------- boot ---------- */
+  function syncHeaderHeight(){
+    var h = document.querySelector('.topbar');
+    if(!h) return;
+    var hh = Math.max(44, Math.round(h.getBoundingClientRect().height));
+    document.documentElement.style.setProperty('--hdr', hh + 'px');
+  }
+
   function boot(){
+    syncHeaderHeight();
+    window.addEventListener('resize', syncHeaderHeight);
     wire();
     applyI18n();
     renderFilters();
     renderBrowse();
     wirePWA();
-    $('bellCount').style.display = 'none';
+    syncBadge();
     $('yearNow').textContent = new Date().getFullYear();
   }
 
